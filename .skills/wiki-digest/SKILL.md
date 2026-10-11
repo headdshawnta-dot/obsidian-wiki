@@ -174,8 +174,18 @@ Most active category: **[category/]** ([N pages added or updated])
   created: TIMESTAMP
   updated: TIMESTAMP
   summary: "Weekly knowledge digest: [N new, M updated pages]. Top themes: [tag1], [tag2]."
+  provenance:
+    extracted: 0.9
+    inferred: 0.1
+    ambiguous: 0.0
+  base_confidence: 0.85
+  lifecycle: draft
+  lifecycle_changed: TIMESTAMP
   ---
   ```
+  Trust fields are required on every page (wiki-lint Rule 12): digests summarize existing
+  reviewed pages, so `base_confidence: 0.85` with the fixed provenance above is the accepted
+  default. Do not omit them.
 - Update `index.md` with the new entry under Journal
 - Do **not** add to `.manifest.json` (digests aren't source ingestions)
 
