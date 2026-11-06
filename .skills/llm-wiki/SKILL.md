@@ -454,7 +454,6 @@ The deterministic `wiki-lint` path validates `_meta/trust-ledger.json`; it does 
 | `wiki-ingest` (multi-doc) | `min(N/3,1)×0.5 + avg_q×0.5` | `draft` |
 | `wiki-research` | varies, often 0.85+ | `draft` |
 | `wiki-capture` | 0.42 | `draft` |
-| `*-history-ingest` | 0.42 | `draft` |
 | `wiki-update` | 0.59 | `draft` |
 | `wiki-synthesize` | `min(input_pages.base_confidence)` | `draft` |
 
@@ -650,12 +649,6 @@ The wiki is configured through environment variables (see `.env.example`). The o
 - `OBSIDIAN_VAULT_PATH` — Where the wiki lives **(required)**
 - `OBSIDIAN_SOURCES_DIR` — Where raw source documents are
 - `OBSIDIAN_CATEGORIES` — Comma-separated list of categories
-- `WIKI_SKIP_PROJECTS` — Comma-separated substrings; any project dir whose name contains one is excluded from history ingest (scan + delta + manifest). See the "Project Scoping" step in the history-ingest skills.
-- `CLAUDE_HISTORY_PATH` — Where to find Claude conversation data
-- `CODEX_HISTORY_PATH` — Where to find Codex session data
-- `HERMES_HOME` — Where to find Hermes agent data
-- `OPENCLAW_HOME` — Where to find OpenClaw data
-- `COPILOT_HISTORY_PATH` — Where to find Copilot session data
 - `OBSIDIAN_LINK_FORMAT` — Internal link syntax: `wikilink` (default) or `markdown`
 - `WIKI_TOKEN_WARN_THRESHOLD` — Emit a warning in `wiki-status` when the full-wiki token estimate exceeds this value (default: `100000`). Set to `0` to disable. See `wiki-status` for the token footprint report.
 - `WIKI_STAGED_WRITES` — When `true`, all LLM-written pages go to `_staging/<category>/` for human review before promotion. See `wiki-setup` and `wiki-stage-commit` for details.
@@ -686,9 +679,7 @@ Use `wiki-status` to see the delta and get a recommendation. Use `wiki-rebuild` 
 For details on specific operations, see the companion skills:
 - **wiki-status** — Audit what's ingested, compute delta, recommend append vs rebuild
 - **wiki-rebuild** — Archive current wiki, rebuild from scratch, or restore from archive
-- **wiki-ingest** — Distill source documents into wiki pages and raw text/chat/log data
-- **claude-history-ingest** — Ingest Claude conversation history
-- **codex-history-ingest** — Ingest Codex CLI session history
+- **wiki-ingest** — Distill source documents, user-provided conversation exports, and raw text/chat/log data
 - **wiki-query** — Answer questions against the wiki
 - **wiki-lint** — Audit and maintain wiki health
 - **wiki-setup** — Initialize a new vault

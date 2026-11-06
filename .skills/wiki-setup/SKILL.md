@@ -23,15 +23,11 @@ If `.env` doesn't exist, create it from `.env.example`. Ask the user for:
      the repo locally first, then add its path. See "Ingesting Git Repositories" in
      `wiki-ingest/SKILL.md` for how repo sources are handled.
 
-3. **Want to import Claude history?** → `CLAUDE_HISTORY_PATH`
-   - Default: auto-discovers from `~/.claude`
-   - Set explicitly if Claude data is elsewhere
-
-4. **Have QMD installed?** → `QMD_WIKI_COLLECTION` / `QMD_PAPERS_COLLECTION` / `QMD_TRANSPORT`
+3. **Have QMD installed?** → `QMD_WIKI_COLLECTION` / `QMD_PAPERS_COLLECTION` / `QMD_TRANSPORT`
    - Optional. Enables semantic search in `wiki-query` and source discovery in `wiki-ingest`.
    - Default to `QMD_TRANSPORT=mcp` unless the user wants the agent to call the local `qmd` CLI directly.
 
-5. **Which timezone should the wiki's timestamps use?** → `timezone:` in `index.md` (not `.env`)
+4. **Which timezone should the wiki's timestamps use?** → `timezone:` in `index.md` (not `.env`)
    - Optional. An IANA name such as `America/Detroit`; blank means UTC in the `Z` spelling.
    - Lives in the vault so it applies to every writer (CLI, server, Python API) and travels with it.
    - Written by `obsidian-wiki setup --timezone <name>` (step 3 below) or by hand; `obsidian-wiki memory now` prints stamps in it.
@@ -257,10 +253,8 @@ Run a quick sanity check:
 Report the results, including the resolved absolute `WRITING_PROFILE` path, and tell the user they can now:
 1. Open the vault in Obsidian (File → Open Vault → select the directory)
 2. Run `wiki-status` to see what's available to ingest
-3. Run `wiki-ingest` to add their first sources
-4. Run `claude-history-ingest` to mine their Claude conversations
-5. Run `codex-history-ingest` to mine their Codex sessions (if they use Codex)
-6. Run `wiki-status` again anytime to check the delta
+3. Run `wiki-ingest` to add their first sources, including any conversation exports they choose to provide
+4. Run `wiki-status` again anytime to check the delta
 
 ## Optional: Install the Stop Hook (Auto-Capture)
 

@@ -155,4 +155,4 @@ Append to `$OBSIDIAN_VAULT_PATH/log.md`:
 - Always show page counts so the user can calibrate how much knowledge is in each tool's silo.
 - Use `[[wikilinks]]` for page references (or standard Markdown links if `OBSIDIAN_LINK_FORMAT=markdown` is set).
 - In diff mode, call out the most *surprising* asymmetry explicitly — that's the insight the user came for.
-- If `.manifest.json` is empty or missing, say so clearly and suggest running `/wiki-history-ingest` first.
+- If `.manifest.json` is empty or missing, say so clearly and suggest ingesting sources with `/wiki-ingest` first.

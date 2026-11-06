@@ -22,7 +22,7 @@ The agent reads your source material directly — markdown, PDFs (with page rang
 | JSON, CSV, chat exports | Parsed first (ChatGPT, Slack, Discord, transcripts), then distilled |
 | URLs | Fetched with `defuddle` or your agent's web fetch; the snapshot is kept in `_raw/` |
 | Code | Distilled into architecture and decisions, not code listings. `/wiki-update` uses the code graph when one is available |
-| Agent histories | Claude Code, Codex, Copilot, Hermes, OpenClaw, and Pi via `/wiki-history-ingest` |
+| Conversation history exports | User-provided transcripts and archives via `/wiki-ingest`; targeted connected-history lookup via `wiki-agent` |
 | Office files (`.docx`, `.xlsx`, `.pptx`) | Planned for ingest, but only as good as your agent's ability to read them. Export to PDF or markdown for reliable results |
 | Audio, video, archives, binaries | Skipped. Transcribe or extract to text first |
 

@@ -19,11 +19,8 @@ This project is a **skill-based framework** for building and maintaining an Obsi
 |---|---|
 | "set up my wiki" / "initialize" | `wiki-setup` |
 | "ingest" / "add this to the wiki" / "process this export" / "ingest this data" | `wiki-ingest` |
-| "import my Claude history" | `claude-history-ingest` |
-| "import my Codex history" | `codex-history-ingest` |
-| "import my Hermes history" | `hermes-history-ingest` |
-| "import my OpenClaw history" | `openclaw-history-ingest` |
-| "import my Pi history" | `pi-history-ingest` |
+| "ingest a conversation export" | `wiki-ingest` |
+| "search an agent's available history for a topic" | `wiki-agent` |
 | "what's the status" / "show the delta" | `wiki-status` |
 | "what do I know about X" | `wiki-query` |
 | "use my vault as context" / "context pack for X" / "bounded context" | `wiki-context-pack` |

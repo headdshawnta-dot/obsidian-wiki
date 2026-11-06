@@ -618,7 +618,7 @@ python3 "$OBSIDIAN_WIKI_REPO/scripts/manifest.py" migrate /path/to/vault \
 
 `--from-root` takes precedence over the current-vault/`$HOME` rules for keys under it. It does not help with keys from *outside* any vault (e.g. another host's `~/.claude` or `~/.hermes` cache): those have no portable path form, so record them with an explicit key (`agent:` or your own scheme) instead.
 
-`python3 scripts/manifest.py delta <vault> --scan '<glob>'` lists new/modified sources, honouring `WIKI_SKIP_PROJECTS`.
+`python3 scripts/manifest.py delta <vault> --scan '<glob>'` lists new/modified sources; `--skip` can exclude project directories when using this helper directly.
 
 ### Graph cache
 

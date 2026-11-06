@@ -39,7 +39,7 @@ _wiki_notify() {
     vault_path=$(cat "$state_dir/.vault_path" 2>/dev/null || echo "unknown vault")
 
     echo "┌─ wiki: last synced ${age_h}h ago · ${vault_path##*/}$([ "$stale" -gt 0 ] && echo " · ${stale} source(s) have new content" || echo "")"
-    echo "│  /wiki-history-ingest claude   sync Claude sessions"
+    echo "│  /wiki-ingest <export-path>    ingest conversation exports"
     echo "│  /wiki-status                  see full delta"
     echo "└─ /memory-bridge diff           compare tool memories"
     shown=$(( shown + 1 ))

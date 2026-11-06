@@ -81,7 +81,7 @@ Plugin 裡的 skill 會加上命名空間（`/obsidian-wiki:wiki-ingest`），�
 /wiki-ingest ~/research
 /wiki-update                        # 蒸餾你目前所在的這個 repo（支持使用 codegraph 增強程式碼結構解析）
 /wiki-capture                       # 把這段對話存下來
-/wiki-history-ingest claude         # 挖出你問過 Claude 的所有東西
+/wiki-ingest ~/exports/chat-history  # 匯入對話匯出檔或逐字稿
 ```
 
 **問它。** 回答會附上 `[[wikilink]]` 引用，而不是憑感覺。

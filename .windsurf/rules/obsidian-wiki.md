@@ -19,10 +19,8 @@ This project is a **skill-based framework** for building and maintaining an Obsi
 |---|---|
 | "set up my wiki" / "initialize" | `.skills/wiki-setup/SKILL.md` |
 | "ingest" / "add this to the wiki" / "process this export" / "ingest this data" | `.skills/wiki-ingest/SKILL.md` |
-| "/wiki-history-ingest claude" / "/wiki-history-ingest copilot" / "/wiki-history-ingest codex" / "/wiki-history-ingest hermes" / "/wiki-history-ingest openclaw" / "/wiki-history-ingest pi" | `.skills/wiki-history-ingest/SKILL.md` |
-| "import my Claude history" | `.skills/claude-history-ingest/SKILL.md` |
-| "import my Codex history" | `.skills/codex-history-ingest/SKILL.md` |
-| "import my Pi history" | `.skills/pi-history-ingest/SKILL.md` |
+| "ingest a conversation export or transcript" | `.skills/wiki-ingest/SKILL.md` |
+| "search an agent's available history for a topic" | `.skills/wiki-agent/SKILL.md` |
 | "what's the status" / "show the delta" | `.skills/wiki-status/SKILL.md` |
 | "what do I know about X" / any question | `.skills/wiki-query/SKILL.md` |
 | "use my vault as context" / "context pack for X" / "bounded context" | `.skills/wiki-context-pack/SKILL.md` |

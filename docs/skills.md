@@ -30,14 +30,7 @@ You need three skills to get value from the vault. Everything else on this page 
 | `wiki-capture` | Save the current conversation as a wiki note; `--quick` stages findings to `_raw/` in under 60 seconds | `/wiki-capture` |
 | `wiki-update` | Sync the current project's knowledge into the vault — works from any repo | `/wiki-update` |
 | `wiki-research` | Autonomous multi-round web research, filed straight into the vault | `/wiki-research [topic]` |
-| `wiki-history-ingest` | Unified router for agent history ingest | `/wiki-history-ingest <agent>` |
-| `claude-history-ingest` | Mine `~/.claude` conversations and memories (Claude Code + desktop) | `/claude-history-ingest` |
-| `codex-history-ingest` | Mine `~/.codex` sessions and rollout logs | `/codex-history-ingest` |
-| `hermes-history-ingest` | Mine `~/.hermes` memories and sessions | `/hermes-history-ingest` |
-| `openclaw-history-ingest` | Mine `~/.openclaw` `MEMORY.md` and sessions | `/openclaw-history-ingest` |
-| `copilot-history-ingest` | Mine `~/.copilot` CLI session history | `/copilot-history-ingest` |
-| `pi-history-ingest` | Mine `~/.pi/agent/sessions` JSONL history | `/pi-history-ingest` |
-| `wiki-agent` | Topic-first ingest from one agent's raw history | `/wiki-claude`, `/wiki-codex`, `/wiki-hermes`, `/wiki-openclaw`, `/wiki-copilot`, `/wiki-pi` |
+| `wiki-agent` | Topic-first search of a connected agent's available history | `/wiki-agent <provider> <topic>` |
 
 ## Asking the brain
 
@@ -58,7 +51,7 @@ These two build a retrieval index over your raw agent sessions. They write a sid
 | `session-brain` | Build and maintain a topic graph over your agent session history | `/session-brain` |
 | `session-search` | Find a past session by topic and load its context into the current conversation | `/wiki-sessions <topic>` |
 
-> **Ingest vs. retrieve.** If you want knowledge preserved as permanent vault pages, use `wiki-history-ingest`. If you want to find the session where something happened, use these.
+> **Ingest vs. retrieve.** Use `wiki-ingest` for conversation exports and transcripts you provide. Use `wiki-agent` to search connected agent history for a specific topic. Use `session-brain` / `session-search` to retrieve local Claude sessions without writing them into the vault.
 
 ## Maintaining the brain
 

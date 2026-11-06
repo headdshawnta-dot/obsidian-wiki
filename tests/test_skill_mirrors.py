@@ -36,6 +36,18 @@ class SkillMirrorsTest(unittest.TestCase):
                 )
                 self.assertEqual(tracked - skills, set(), f"{mirror}/skills/ links to removed skills")
 
+    def test_removed_history_ingest_skills_are_not_mirrored(self) -> None:
+        removed = {
+            "claude-history-ingest", "codex-history-ingest", "copilot-history-ingest",
+            "hermes-history-ingest", "openclaw-history-ingest", "pi-history-ingest",
+        }
+        skills = {p.parent.name for p in (ROOT / ".skills").glob("*/SKILL.md")}
+        self.assertTrue(removed.isdisjoint(skills))
+        for mirror in MIRRORS:
+            with self.subTest(mirror=mirror):
+                tracked = _tracked(f"{mirror}/skills/")
+                self.assertTrue(removed.isdisjoint(tracked))
+
     def test_mirror_links_are_relative_and_resolve(self) -> None:
         for mirror in MIRRORS:
             for link in (ROOT / mirror / "skills").iterdir():

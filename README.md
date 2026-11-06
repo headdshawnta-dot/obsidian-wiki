@@ -80,7 +80,7 @@ Other paths — `git clone`, Claude Code plugin, Skills CLI, multiple vaults →
 /wiki-ingest ~/research
 /wiki-update                        # distill the repo you're standing in (code-graph aware)
 /wiki-capture                       # save this conversation
-/wiki-history-ingest claude         # mine everything you've ever asked Claude
+/wiki-ingest ~/exports/chat-history  # ingest a conversation export or transcript
 ```
 
 **Ask it.** Answers come back with `[[wikilink]]` citations, not vibes.

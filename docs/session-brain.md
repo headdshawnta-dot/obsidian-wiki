@@ -18,7 +18,7 @@ This is the distinction that matters:
 
 | You want | Use | Writes to |
 |---|---|---|
-| Knowledge preserved as permanent pages | `/wiki-history-ingest` | The vault |
+| Knowledge preserved as permanent pages | `/wiki-ingest <export-path>` | The vault |
 | To find the session where something happened | `/session-brain` + `/wiki-sessions` | A sidecar only |
 
 The session brain **never writes to your vault**. Everything lands in `~/.claude/session-brain/` (override with `WIKI_SESSION_BRAIN_DIR`).
@@ -51,7 +51,7 @@ obsidian-wiki sessions-build --k 12 --min-sim 0.12 --mutual
 | `--mutual` | Keep only mutual kNN edges — tighter, smaller, more precise clusters |
 | `--half-life D` | Recency half-life in days (default 90) |
 | `--since DATE` | Only read sessions modified on or after an ISO date |
-| `--skip a,b` | Skip project dirs matching these substrings (or set `WIKI_SKIP_PROJECTS`) |
+| `--skip a,b` | Skip project directories matching these substrings |
 | `--full` | Ignore caches and re-read every session |
 | `--no-html` | Skip writing `graph.html` |
 | `--claude-dir PATH` | Read a different agent session cache |

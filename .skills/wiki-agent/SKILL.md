@@ -1,7 +1,7 @@
 ---
 name: wiki-agent
 description: >
-  Search one AI agent's raw history for a specific topic, ingest only matching sessions, and return a synthesized answer. Use for targeted cross-agent recall; use wiki-history-ingest for bulk archival ingestion.
+  Search one AI agent's raw history exposed through a configured integration for a specific topic, ingest only matching sessions, and return a synthesized answer. Use for targeted cross-agent recall; use wiki-ingest for user-provided bulk exports.
 ---
 
 # Wiki Agent — Targeted Cross-Agent History Search + Ingest
@@ -23,7 +23,7 @@ Parse the invocation to determine the target agent and optional query:
 | `/wiki-copilot [query]` | Copilot chat history | `/wiki-copilot "test strategy for API routes"` |
 | `/wiki-pi [query]` | Pi agent history | `/wiki-pi "how did I refactor the auth module"` |
 
-If no query is given, default to **recent sessions mode**: ingest the last 5 unprocessed sessions from that agent and return a summary of what was found. This is equivalent to a focused `wiki-history-ingest` for that agent only.
+If no query is given, default to **recent sessions mode**: ingest the last 5 unprocessed sessions from that agent and return a summary of what was found. This is equivalent to a focused targeted history lookup for that agent.
 
 ## Before You Start
 
@@ -37,6 +37,8 @@ If no query is given, default to **recent sessions mode**: ingest the last 5 unp
 ---
 
 ## Step 1: Locate the Agent's History Root
+
+Use only history paths exposed by a configured agent integration or explicitly authorized for this task. This skill does not replace the removed provider-specific bulk-ingest workflows and must not infer arbitrary filesystem access.
 
 | Agent | Default path | Config override |
 |---|---|---|

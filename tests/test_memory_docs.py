@@ -79,8 +79,6 @@ class MemoryDocsTest(unittest.TestCase):
         "wiki-ingest", "wiki-update", "wiki-capture", "wiki-research", "wiki-synthesize",
         "wiki-dedup", "wiki-import", "wiki-agent", "wiki-stage-commit", "cross-linker",
         "tag-taxonomy", "daily-update",
-        "claude-history-ingest", "codex-history-ingest", "copilot-history-ingest",
-        "hermes-history-ingest", "openclaw-history-ingest", "pi-history-ingest",
     )
 
     def test_every_write_skill_calls_the_shared_writer(self) -> None:

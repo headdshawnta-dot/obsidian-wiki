@@ -18,12 +18,6 @@ REQUIRED_SKILLS = (
     "wiki-import",
     "wiki-dedup",
     "cross-linker",
-    "claude-history-ingest",
-    "codex-history-ingest",
-    "copilot-history-ingest",
-    "hermes-history-ingest",
-    "openclaw-history-ingest",
-    "pi-history-ingest",
 )
 
 

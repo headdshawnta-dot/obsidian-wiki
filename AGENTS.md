@@ -65,14 +65,8 @@ Skills live in `.skills/<name>/SKILL.md`. Match the user's intent to the right s
 | User says something like… | Skill |
 |---|---|
 | "set up my wiki" / "initialize" | `wiki-setup` |
-| "/wiki-history-ingest claude" / "/wiki-history-ingest copilot" / "/wiki-history-ingest codex" / "/wiki-history-ingest hermes" / "/wiki-history-ingest openclaw" / "/wiki-history-ingest pi" | `wiki-history-ingest` |
-| "ingest" / "add this to the wiki" / "process these docs" / "process this export" / "ingest this data" / logs, transcripts / "/ingest-url <url>" / "add this URL" / "ingest this link" / "save this page" | `wiki-ingest` |
-| "import my Claude history" / "mine my conversations" | `claude-history-ingest` |
-| "import my Codex history" / "mine my Codex sessions" | `codex-history-ingest` |
-| "import my Hermes history" / "mine my Hermes memories" / "ingest ~/.hermes" | `hermes-history-ingest` |
-| "import my OpenClaw history" / "mine my OpenClaw sessions" / "ingest ~/.openclaw" | `openclaw-history-ingest` |
-| "import my Copilot history" / "mine my Copilot sessions" / "ingest ~/.copilot" | `copilot-history-ingest` |
-| "import my Pi history" / "mine my Pi sessions" / "ingest ~/.pi" | `pi-history-ingest` |
+| "ingest" / "add this to the wiki" / "process these docs" / "process this export" / "ingest this data" / logs, transcripts / conversation archives / "/ingest-url <url>" / "add this URL" / "ingest this link" / "save this page" | `wiki-ingest` |
+| "search an agent's available history for a topic" | `wiki-agent` |
 | "what's the status" / "what's been ingested" / "show the delta" | `wiki-status` |
 | "wiki insights" / "hubs" / "wiki structure" | `wiki-status` (insights mode) |
 | "is my vault at equilibrium" / "wiki equilibrium" / "is maintenance done" / "are my skills fighting" | `wiki-status` (equilibrium mode) |
@@ -108,15 +102,11 @@ Skills live in `.skills/<name>/SKILL.md`. Match the user's intent to the right s
 | "/wiki-stage-commit" / "review staged pages" / "commit staged writes" / "promote staged pages" / "what's waiting in staging" | `wiki-stage-commit` |
 | "restyle Obsidian" / "adjust the vault layout" / "CSS snippet" / "tune tabs/sidebars/graph panes" | `obsidian-layout-adjustment` |
 
-### Session history: ingest vs. retrieve
+### Conversation archives: ingest vs. retrieve
 
-Three skills read agent session caches, and they are not interchangeable:
-
-- `wiki-history-ingest` (and its per-agent variants) **ingests** — distils sessions into permanent vault pages.
-- `wiki-agent` **ingests a slice** — finds sessions about one topic in another agent's history and pulls them into the vault.
-- `session-brain` / `session-search` **retrieve** — build a topic graph over the raw sessions and find or load one. They write a sidecar at `~/.claude/session-brain/` and never touch the vault.
-
-If the user wants knowledge preserved, ingest. If they want to find the session where something happened, retrieve.
+- `wiki-ingest` processes user-provided conversation exports, transcripts, and other supported source files into permanent vault pages.
+- `wiki-agent` can search a configured agent's available history for a specific topic and ingest a relevant slice.
+- `session-brain` / `session-search` retrieve local Claude sessions from their separate sidecar index; they never write those sessions into the vault.
 
 ## Cross-Project Usage
 

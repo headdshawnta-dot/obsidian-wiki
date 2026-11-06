@@ -13,7 +13,7 @@ You are computing the current state of the wiki: what's been ingested, what's ne
 **Writing profile:** Before drafting or rewriting natural-language Markdown, read and apply the `Writing Profile Resolution` section in `llm-wiki/SKILL.md`. Framework schema, provenance, safety, and operation-specific requirements take precedence.
 Apply `WRITING.md` preferences only to generated `_insights.md` prose; keep the analyser snapshot verbatim.
 
-1. **Resolve config** — follow the Config Resolution Protocol in `llm-wiki/SKILL.md` (inline `@name` override → walk up CWD for `.env` → global config → prompt setup). This gives `OBSIDIAN_VAULT_PATH`, `OBSIDIAN_SOURCES_DIR`, `CLAUDE_HISTORY_PATH`, and `CODEX_HISTORY_PATH`.
+1. **Resolve config** — follow the Config Resolution Protocol in `llm-wiki/SKILL.md` (inline `@name` override → walk up CWD for `.env` → global config → prompt setup). This gives `OBSIDIAN_VAULT_PATH` and `OBSIDIAN_SOURCES_DIR`.
 2. Read `.manifest.json` at the vault root — this is the ingest tracking ledger
 
 ## The Manifest
@@ -36,25 +36,14 @@ The manifest lives at `$OBSIDIAN_VAULT_PATH/.manifest.json`. It tracks every sou
       "pages_created": ["concepts/transformers.md"],
       "pages_updated": ["entities/vaswani.md"]
     },
-    "~/.claude/projects/-Users-name-my-app/abc123.jsonl": {
+    "~/Documents/research/meeting-notes.md": {
       "ingested_at": "2026-04-06T11:00:00Z",
       "size_bytes": 128000,
       "modified_at": "2026-04-06T09:00:00Z",
-      "source_type": "claude_conversation",
-      "project": "my-app",
+      "source_type": "document",
+      "project": null,
       "pages_created": ["entities/my-app.md"],
       "pages_updated": ["skills/react-debugging.md"]
-    }
-  },
-  "projects": {
-    "my-app": {
-      "source_repo": "github.com/owner/my-app",
-      "source_cwd_hint": "~/.claude/projects/-Users-name-my-app",
-      "vault_path": "projects/my-app",
-      "last_ingested": "2026-04-06T11:00:00Z",
-      "conversations_ingested": 5,
-      "conversations_total": 8,
-      "memory_files_ingested": 3
     }
   },
   "stats": {
@@ -68,30 +57,15 @@ The manifest lives at `$OBSIDIAN_VAULT_PATH/.manifest.json`. It tracks every sou
 
 ## Step 1: Scan Current Sources
 
-Build an inventory of everything available to ingest right now:
+Build an inventory of documents and other user-designated source directories:
 
 ### Documents (from `OBSIDIAN_SOURCES_DIR`)
 ```
-Glob each directory in OBSIDIAN_SOURCES_DIR for all text files
+Glob each directory in OBSIDIAN_SOURCES_DIR for supported text and document files
 Record: path, size, modification time
 ```
 
-### Claude History (from `CLAUDE_HISTORY_PATH`)
-```
-Glob: ~/.claude/projects/*/          → project directories
-Glob: ~/.claude/projects/*/*.jsonl   → conversation files
-Glob: ~/.claude/projects/*/memory/*.md → memory files
-Record: path, size, modification time, parent project
-```
-
-### Codex History (from `CODEX_HISTORY_PATH`)
-```
-Glob: ~/.codex/session_index.jsonl            → session inventory index
-Glob: ~/.codex/sessions/**/rollout-*.jsonl    → session rollout transcripts
-Glob: ~/.codex/history.jsonl                  → optional local history log
-Glob: ~/.codex/archived_sessions/**/rollout-*.jsonl → archived rollouts (if user wants archive coverage)
-Record: path, size, modification time, inferred project from cwd when available
-```
+User-provided conversation exports and transcripts are ordinary `wiki-ingest` sources. Do not scan provider-specific local history directories automatically.
 
 ### Any other sources the user has pointed at previously
 Check the manifest for source paths outside the standard directories.
@@ -110,16 +84,6 @@ Compare current sources against the manifest. Classify each source file:
 | **Unavailable** | Machine-local source (home-relative or absolute key) absent on this machine — e.g. a synced entry from another host | Skip — do not report as deleted or clean up; it may exist on the machine that ingested it |
 
 When a manifest entry has no `content_hash` (older entry), fall back to mtime comparison only.
-
-For Claude history specifically, also compute:
-- New projects (directories in `~/.claude/projects/` not in manifest)
-- New conversations within existing projects
-- Updated memory files
-
-For Codex history specifically, also compute:
-- New rollout files under `sessions/**`
-- Updated `session_index.jsonl` entries (session title/freshness changes)
-- Archived rollout delta only when archive coverage is requested
 
 ## Step 3: Report the Status
 
@@ -149,8 +113,7 @@ Present a clear summary:
 | Source | Type | Size |
 |---|---|---|
 | ~/Documents/research/new-paper.pdf | document | 2.1 MB |
-| ~/.claude/projects/-Users-.../session-xyz.jsonl | claude_conversation | 340 KB |
-| ~/.codex/sessions/2026/04/12/rollout-...jsonl | codex_rollout | 220 KB |
+| ~/exports/conversation.json | conversation export | 340 KB |
 | ... | | |
 
 ### Modified sources (need re-ingesting): 3
@@ -158,10 +121,6 @@ Present a clear summary:
 |---|---|---|---|
 | ~/notes/architecture.md | 2026-04-01 | 2026-04-05 | 4 days newer |
 | ... | | | |
-
-### New projects (not yet in wiki): 2
-- **tractorex** (3 conversations, 2 memory files)
-- **papertech** (1 conversation, 0 memory files)
 
 ### Deleted sources (ingested but gone): 0
 
@@ -510,8 +469,8 @@ This is the repeated-game view: a source that keeps producing pages needing repa
 
 - If the manifest doesn't exist, report everything as "new" and recommend a full ingest
 - This skill only reads and reports — it doesn't modify anything (except writing `_insights.md` in insights mode, which is regenerable)
-- The actual ingest work is done by the ingest skills (`wiki-ingest`, `claude-history-ingest`, `codex-history-ingest`)
-- Those skills are responsible for updating the manifest after they finish
+- The actual ingest work is done by `wiki-ingest` for user-provided source files, including conversation exports
+- `wiki-ingest` is responsible for updating the manifest after it finishes
 
 ## QMD Refresh After Vault Writes
 

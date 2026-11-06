@@ -95,9 +95,7 @@ Reset `index.md` to the empty template. Reset `log.md` with just the rebuild ent
 Tell the user the vault is cleared and ready for a full re-ingest. They can now run:
 
 1. `wiki-status` — to see all sources as "new"
-2. `claude-history-ingest` — to reprocess Claude history
-3. `codex-history-ingest` — to reprocess Codex session history
-4. `wiki-ingest` — to reprocess documents and any other raw data
+2. `wiki-ingest` — to reprocess documents, conversation exports, and any other supported raw data
 
 Each of these will rebuild the manifest as they go.
 

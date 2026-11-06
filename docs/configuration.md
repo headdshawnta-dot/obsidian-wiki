@@ -96,17 +96,10 @@ Neither hook can fail a session. Every error path — no vault configured, packa
 
 See [Memory Surface](memory.md#session-lifecycle) for what the recap contains and how it is framed.
 
-## History ingest
+## Local session retrieval
 
 | Variable | What it does | Default |
 |---|---|---|
-| `CLAUDE_HISTORY_PATH` | Where to find Claude data | *auto-discovers from `~/.claude`* |
-| `CODEX_HISTORY_PATH` | Where to find Codex data | `~/.codex` |
-| `HERMES_HISTORY_PATH` | Where to find Hermes data | `~/.hermes` |
-| `OPENCLAW_HISTORY_PATH` | Where to find OpenClaw data | `~/.openclaw` |
-| `COPILOT_HISTORY_PATH` | Where to find Copilot CLI data | `~/.copilot/session-state` |
-| `PI_HISTORY_PATH` | Where to find Pi sessions | `~/.pi/agent/sessions` |
-| `WIKI_SKIP_PROJECTS` | Comma-separated substrings; project dirs matching any are skipped during scan, delta, and manifest steps. e.g. `archived,scratch,sandbox` | *(empty)* |
 | `WIKI_SESSION_BRAIN_DIR` | Where the session-brain sidecar is written | `~/.claude/session-brain` |
 
 ## Staged writes & trust

@@ -15,8 +15,8 @@ Each agent has its own convention for discovering skills. Setup symlinks the can
 | **[Gemini CLI](https://github.com/google-gemini/gemini-cli)** | `GEMINI.md` | `~/.gemini/skills/` | ✅ `/wiki-ingest`, `/wiki-query`, etc. |
 | **[Google Antigravity](https://antigravity.google)** | `.agent/rules/` + `.agent/workflows/` | `.agents/skills/` | ✅ via workflows registry |
 | **[Kiro IDE/CLI](https://kiro.dev)** | `.kiro/steering/obsidian-wiki.md` | `.kiro/skills/` + `~/.kiro/skills/` | ✅ `/wiki-ingest`, `/wiki-status`, etc. |
-| **[Hermes](https://hermes-agent.nousresearch.com)** | `.hermes.md` | `~/.hermes/skills/` | ✅ `/wiki-history-ingest hermes`, etc. |
-| **[OpenClaw](https://openclaw.ai)** | `AGENTS.md` | `~/.openclaw/skills/` + `~/.agents/skills/` | ✅ `/wiki-ingest`, `/wiki-history-ingest openclaw`, etc. |
+| **[Hermes](https://hermes-agent.nousresearch.com)** | `.hermes.md` | `~/.hermes/skills/` | ✅ Portable wiki skills |
+| **[OpenClaw](https://openclaw.ai)** | `AGENTS.md` | `~/.openclaw/skills/` + `~/.agents/skills/` | ✅ `/wiki-ingest` |
 | **[OpenCode](https://opencode.ai)** | `AGENTS.md` | `~/.agents/skills/` | ✅ `/wiki-ingest`, `/wiki-query`, etc. |
 | **[Aider](https://aider.chat)** | `AGENTS.md` | `~/.agents/skills/` | Describe intent in chat |
 | **[Factory Droid](https://factory.ai)** | `AGENTS.md` | `~/.agents/skills/` | ✅ `/wiki-ingest`, `/wiki-query`, etc. |
@@ -24,7 +24,7 @@ Each agent has its own convention for discovering skills. Setup symlinks the can
 | **GitHub Copilot (VS Code)** | `.github/copilot-instructions.md` | — | Describe intent in chat |
 | **GitHub Copilot (CLI)** | — | `~/.copilot/skills/` | ✅ `/wiki-ingest`, `/wiki-query`, etc. |
 | **[Kilocode](https://kilo.ai/)** | `AGENTS.md` / `CLAUDE.md` | `.agents/skills/` + `.claude/skills/` | ✅ `/wiki-ingest`, `/wiki-status`, etc. |
-| **[Pi](https://pi.dev)** | `AGENTS.md` | `.pi/skills/` + `~/.pi/agent/skills/` | ✅ `/wiki-ingest`, `/wiki-history-ingest pi`, etc. |
+| **[Pi](https://pi.dev)** | `AGENTS.md` | `.pi/skills/` + `~/.pi/agent/skills/` | ✅ `/wiki-ingest` |
 
 > Slash commands work in Claude Code, Cursor, Windsurf, and most CLI agents. Everywhere else, just describe what you want — the agent matches your intent against the skill descriptions.
 
@@ -101,8 +101,8 @@ Reads `.hermes.md` first, then falls back to `AGENTS.md`. Skills discovered from
 
 ```bash
 cd /path/to/obsidian-wiki && hermes "set up my wiki"
-# Mine Hermes history into the wiki:
-/wiki-history-ingest hermes
+# Ingest a Hermes conversation export you provide:
+/wiki-ingest ~/exports/hermes-conversation.json
 ```
 </details>
 
@@ -113,8 +113,8 @@ Reads `AGENTS.md` (priority 10). Discovers skills from `~/.openclaw/skills/` and
 
 ```bash
 cd /path/to/obsidian-wiki && openclaw "set up my wiki"
-# Mine OpenClaw history:
-/wiki-history-ingest openclaw
+# Ingest an OpenClaw conversation export you provide:
+/wiki-ingest ~/exports/openclaw-conversation.json
 ```
 </details>
 
@@ -133,7 +133,7 @@ Reads `AGENTS.md` (walking up from cwd). Discovers skills from `.pi/skills/`, `.
 
 ```bash
 cd /path/to/obsidian-wiki && pi "set up my wiki"
-# Mine Pi session history:
-/wiki-history-ingest pi
+# Ingest a Pi session export you provide:
+/wiki-ingest ~/exports/pi-session.jsonl
 ```
 </details>

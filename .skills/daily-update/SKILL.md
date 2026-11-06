@@ -122,8 +122,7 @@ obsidian-wiki memory log DAILY-UPDATE fresh=<N> stale=<N> missing=<N> index_adde
 - Health check: N broken links, N orphans, N stale pages (omit this line if lint didn't run this cycle)
 
 Stale sources (run to sync):
-  /wiki-history-ingest claude   — N sessions since last ingest
-  /wiki-history-ingest codex    — N sessions since last ingest
+  /wiki-ingest <export-path>   — ingest user-provided conversation exports or transcripts
 ```
 
 ### Setup Mode (triggered by "set up the daily cron" or "install terminal notification")
