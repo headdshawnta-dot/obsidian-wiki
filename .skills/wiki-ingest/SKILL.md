@@ -117,11 +117,12 @@ This outputs a JSON plan with `batches` (each a list of files + total_bytes + ki
 1. **Check `stats.skipped_unchanged`** — report to the user how many files are being skipped (already ingested, hash unchanged).
 2. **If `batch_count == 0`** — all files are unchanged. Tell the user and stop.
 3. **If `batch_count == 1`** — proceed with the single batch as a normal Step 1 ingest.
-4. **If `batch_count > 1`** — dispatch each batch as a **parallel subagent** (multiple Agent tool calls in a single message). Each subagent receives a message like:
+4. **Before dispatch** — run Step 0.5 Identity Guard over **every file in the plan**. If any source is blocked, stop and report it; do not spawn subagents.
+5. **If `batch_count > 1`** — dispatch each batch as a **parallel subagent** (multiple Agent tool calls in a single message). Each subagent receives a message like:
    ```
-   Ingest these files into the wiki at $OBSIDIAN_VAULT_PATH using wiki-ingest Step 1 onward:
+   Ingest these files into the wiki at $OBSIDIAN_VAULT_PATH using wiki-ingest Step 0.5 onward:
    <list of file paths from this batch>
-   Skip batch-plan — these files are already partitioned.
+   Run ingest-guard on your batch before writing. Skip batch-plan — these files are already partitioned.
    ```
    Wait for all subagents to complete, then run `/cross-linker` once to wire cross-references across all batches.
 

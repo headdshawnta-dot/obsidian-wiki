@@ -157,6 +157,23 @@ def test_checks_paths_aggregates_blocked_state(tmp_path):
     assert result["blocked"] == 1
 
 
+def test_skill_requires_the_guard_before_writing():
+    skill = (Path(__file__).resolve().parents[1] / ".skills/wiki-ingest/SKILL.md").read_text(
+        encoding="utf-8"
+    )
+    assert "Step 0.5: Identity Guard" in skill
+    assert "obsidian-wiki ingest-guard" in skill
+    assert "One source, one primary page" in skill
+
+
+def test_batch_dispatch_does_not_skip_the_guard():
+    skill = (Path(__file__).resolve().parents[1] / ".skills/wiki-ingest/SKILL.md").read_text(
+        encoding="utf-8"
+    )
+    assert "Step 0.5 onward" in skill
+    assert "wiki-ingest Step 1 onward" not in skill
+
+
 def test_cli_exits_two_when_blocked(tmp_path):
     vault = tmp_path / "vault"
     vault.mkdir()
