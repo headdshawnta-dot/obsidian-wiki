@@ -127,6 +127,27 @@ This outputs a JSON plan with `batches` (each a list of files + total_bytes + ki
 
 **Fallback** (if `obsidian-wiki` is not installed): process files sequentially in groups of 15.
 
+### Step 0.5: Identity Guard (mandatory, before any write)
+
+Run the deterministic guard on every source in the batch before reading or planning pages:
+
+```bash
+obsidian-wiki ingest-guard "$OBSIDIAN_VAULT_PATH" <source-file-or-dir>... --pretty
+```
+
+The guard is read-only. It resolves the source's extension-stripped identity, checks page stems, titles, and the manifest's `page_key`, and returns one decision per source:
+
+- `create` — no page matches. Create exactly one **primary reference page**, named from `proposed_page_name` (the source name with `.pdf`/`.docx`/`.xlsx`/`.pptx` removed). Never name it `<source-filename>.md`.
+- `update` — one page matches. Update that page (`page`). Do not create a second reference page.
+- `skip` — the source hash is unchanged. Write nothing.
+- `blocked` — zero or multiple pages match, or the manifest points at missing pages. **Stop. Do not write anything in this batch.** Resolve the listed candidates or repair the manifest first.
+
+An exit code of `2` means at least one source is blocked. A batch is not allowed to proceed while any source is blocked. If the `ingest-guard` command is unavailable, stop and report the missing CLI; do not substitute a visual filename check.
+
+After writing the batch, run the same guard once more. Every source must return `update` or `skip` with exactly one candidate. A post-write `blocked` means the ingest created a second page; remove the wrong page and repair the manifest before continuing.
+
+**One source, one primary page.** Derived concept/entity pages may still be created or updated by Step 4; the invariant applies to the source's reference page identified by the manifest `page_key`. When recording the manifest, point `page_key` at that primary page and use the original source file as the key, not only an intermediate `_raw/` conversion file.
+
 ### Ingesting Git Repositories
 
 Repos — public or private, on any host (GitHub, GitLab, self-hosted) — are ingested the same
@@ -354,7 +375,7 @@ If the source is not project-specific, put everything in global categories.
 
 ### Step 4: Plan Updates
 
-Before writing anything, plan which pages to update or create. Cap the plan at `OBSIDIAN_MAX_PAGES_PER_INGEST` pages (default `15` if unset) — aim for 10 pages up to that cap. If the plan would exceed the cap, prioritize by importance tier (`core` > `supporting` > `peripheral`, see below) and defer the rest to a follow-up ingest; tell the user how many pages were deferred. For each:
+Before writing anything, carry the Step 0.5 decision into the plan: `create` uses `proposed_page_name` for the primary reference page, `update` targets the returned `page`, `skip` writes nothing, and `blocked` stops the batch. Then plan which pages to update or create. Cap the plan at `OBSIDIAN_MAX_PAGES_PER_INGEST` pages (default `15` if unset) — aim for 10 pages up to that cap. If the plan would exceed the cap, prioritize by importance tier (`core` > `supporting` > `peripheral`, see below) and defer the rest to a follow-up ingest; tell the user how many pages were deferred. For each:
 - Does this page already exist? (Check `index.md` and use Glob to search `OBSIDIAN_VAULT_PATH`)
 - If it exists, what new information does this source add?
 - If it's new, which category does it belong in?
@@ -471,7 +492,7 @@ After writing pages, check that wikilinks work in both directions. If page A lin
 
 ### Step 7: Update Manifest and Special Files
 
-**`.manifest.json`** — For each source file ingested, add or update its entry. The **key** must be a portable source key (contract v2 in `llm-wiki/SKILL.md` → `.manifest.json`): vault-relative when the source is inside the vault (`Raw/articles/foo.pdf`), `~`-relative when under `$HOME` (`~/.claude/...`), or a pseudo-key (`repo:`/`url:`/`agent:`) when neither applies. **Never key an entry by a machine absolute path.** The value is:
+**`.manifest.json`** — For each source file ingested, add or update its entry. `page_key` is the source's single primary reference page; record the **original source file** as the key even when the page was distilled from an intermediate `_raw/` conversion. The **key** must be a portable source key (contract v2 in `llm-wiki/SKILL.md` → `.manifest.json`): vault-relative when the source is inside the vault (`Raw/articles/foo.pdf`), `~`-relative when under `$HOME` (`~/.claude/...`), or a pseudo-key (`repo:`/`url:`/`agent:`) when neither applies. **Never key an entry by a machine absolute path.** The value is:
 ```json
 {
   "content_hash": "sha256:<64-char-hex>",
@@ -557,6 +578,7 @@ When ingesting a directory, process sources one at a time but maintain a running
 
 After ingesting, verify:
 - [ ] Every new page has frontmatter with title, category, tags, sources
+- [ ] `obsidian-wiki ingest-guard` passed before the write and again after it (one primary page per source, no `X.pdf.md` mirror)
 - [ ] Every new page has at least 2 wikilinks to existing pages
 - [ ] No orphaned pages (pages with zero incoming links)
 - [ ] `index.md` reflects all changes

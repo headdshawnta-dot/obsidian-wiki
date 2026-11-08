@@ -1585,6 +1585,15 @@ def cmd_cache_check(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_ingest_guard(args: argparse.Namespace) -> int:
+    from obsidian_wiki.ingest_guard import check_paths, result_json
+    vault = Path(args.vault).expanduser().resolve()
+    sources = [_resolve_source_arg(vault, p) for p in args.sources]
+    result = check_paths(vault, sources)
+    print(result_json(result, pretty=args.pretty))
+    return 0 if result["ok"] else 2
+
+
 def cmd_projects_check(args: argparse.Namespace) -> int:
     from obsidian_wiki.cache import check_projects
     vault = Path(args.vault).expanduser().resolve()
@@ -3139,6 +3148,15 @@ def build_parser() -> argparse.ArgumentParser:
     cc.add_argument("sources", nargs="+", help="source file or directory paths to check")
     cc.add_argument("--pretty", action="store_true", help="pretty-print JSON output")
     cc.set_defaults(func=cmd_cache_check)
+
+    ig = sub.add_parser(
+        "ingest-guard",
+        help="block ingest when one source file matches more than one existing page",
+    )
+    ig.add_argument("vault", help="path to the Obsidian vault")
+    ig.add_argument("sources", nargs="+", help="source file or directory paths to preflight")
+    ig.add_argument("--pretty", action="store_true", help="pretty-print JSON output")
+    ig.set_defaults(func=cmd_ingest_guard)
 
     pc = sub.add_parser(
         "projects-check",
