@@ -575,6 +575,8 @@ def _update_source_locked(
         target["last_ingested"] = now
         if pages_produced is not None:
             target["pages_produced"] = pages_produced
+            if len(pages_produced) == 1:
+                target["page_key"] = pages_produced[0]
     else:
         if not isinstance(sources, dict):
             sources = {}
@@ -603,6 +605,8 @@ def _update_source_locked(
         entry["last_ingested"] = now
         if pages_produced is not None:
             entry["pages_produced"] = pages_produced
+            if len(pages_produced) == 1:
+                entry["page_key"] = pages_produced[0]
         sources[manifest_key] = entry
 
     manifest["sources"] = sources

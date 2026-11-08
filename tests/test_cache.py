@@ -356,6 +356,14 @@ class TestCacheCLI:
         assert proc.returncode == 0
         sources = _load_manifest(vault)
         assert sources[str(src_file)]["pages_produced"] == ["concepts/foo.md", "entities/bar.md"]
+        assert "page_key" not in sources[str(src_file)]
+
+    def test_cache_update_with_one_page_records_page_key(self, vault, src_file):
+        proc = self._run("cache-update", str(vault), str(src_file),
+                         "--pages", "references/doc.md")
+        assert proc.returncode == 0
+        sources = _load_manifest(vault)
+        assert sources[str(src_file)]["page_key"] == "references/doc.md"
 
     def test_cache_update_non_portable_source_warns_on_stderr(self, vault, src_file):
         # src_file lives outside the vault and $HOME, so the fallback absolute
